@@ -258,6 +258,13 @@ func (ff *FFmpeg) Arguments() []string {
 	args = append(args, ff.generateFilterComplex("a"))
 	args = append(args, "-map", "[a]")
 
+	//Metadata
+	for key, val := range ff.metadata {
+		arg := fmt.Sprintf("%s=%s", key, val)
+		args = append(args, "-metadata", arg)
+		args = append(args, "-metadata:s:a:0", arg)
+	}
+
 	//Output
 	args = append(args, "-acodec", ff.codecOut)
 	args = append(args, "-f", ff.formatOut)

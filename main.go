@@ -28,7 +28,6 @@ func main() {
 	hp.SetInputChannels(0, 1)
 	hp.SetOutputChannels(0, 1)
 	hp.Add(NewFilterHighpass(70))
-	hp.Add(NewFilterVolumeGain(1.0))
 
 	lp := ff.NewFilter()
 	lp.SetInputChannels(0, 1)
@@ -39,7 +38,6 @@ func main() {
 	lp.Add(NewFilterEqualizer(50, 20, 4.0))
 	lp.Add(NewFilterEqualizer(65, 10, 3.0))
 	lp.Add(NewFilterEqualizer(110, 80, 2.0))
-	lp.Add(NewFilterVolumeGain(1.0))
 
 	//Start the conversion process
 	if err := ff.Start(); err != nil {
