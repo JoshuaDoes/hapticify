@@ -60,7 +60,7 @@ func (ff *FFmpeg) Start() error {
 	process.Stderr = ff.stderr
 	ff.process = process
 
-	go ff.spawn()
+	ff.spawn()
 	return nil
 }
 
@@ -73,11 +73,14 @@ func (ff *FFmpeg) spawn() {
 
 	go ff.threaderr()
 	go ff.threadout()
+	go ff.threadwait()
+}
 
-	ff.Wait()
+func (ff *FFmpeg) threadwait() {
 	if err := ff.process.Wait(); err != nil {
 		ff.error(err)
 	}
+	ff.running = false
 }
 
 func (ff *FFmpeg) threaderr() {
@@ -95,15 +98,15 @@ func (ff *FFmpeg) threadout() {
 // Close stops the ffmpeg process and cleans up remaining resources.
 // Must be called on loop until no error is returned.
 func (ff *FFmpeg) Close() error {
+	ff.running = false
 	ff.stdin = nil
 	ff.stdout = nil
 	ff.stderr = nil
-	if ff.IsRunning() {
+	if ff.process != nil {
 		if err := ff.process.Process.Kill(); err != nil {
 			return err
 		}
 		ff.process = nil
-		ff.running = false
 	}
 	if ff.onExit != nil {
 		ff.onExit(ff)
