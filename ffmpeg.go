@@ -1,19 +1,18 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"os/exec"
 	"strings"
 	"time"
 )
 
 type FFmpeg struct {
-	running bool
-	process *exec.Cmd
-	errors  []error
-	onExit  func(ff *FFmpeg)
+	running   bool
+	process   *exec.Cmd
+	errors    []error
+	onExit    func(ff *FFmpeg)
+	onExitRan bool
 
 	input, output           string
 	codecIn, codecOut       string
@@ -26,7 +25,7 @@ type FFmpeg struct {
 	metadata                map[string]string
 	filters                 []*Filter
 
-	stdin, stdout, stderr *bytes.Buffer
+	stdin, stdout, stderr *Buffer
 
 	buffer  []byte        //Stores the output of the stream until read or flushed
 	bufTime time.Duration //length of time to buffer audio for, to keep data in sync with streamers
@@ -41,7 +40,29 @@ func NewFFmpeg(codec, format string) *FFmpeg {
 	ff.metadata = make(map[string]string)
 	ff.codecOut = codec
 	ff.formatOut = format
+	ff.stdin = NewBuffer("in")
+	ff.stdout = NewBuffer("out")
+	ff.stderr = NewBuffer("err")
 	return ff
+}
+
+func (ff *FFmpeg) Stdin() *Buffer {
+	if ff.stdin != nil {
+		return ff.stdin.Reference()
+	}
+	return nil
+}
+func (ff *FFmpeg) Stdout() *Buffer {
+	if ff.stdout != nil {
+		return ff.stdout.Reference()
+	}
+	return nil
+}
+func (ff *FFmpeg) Stderr() *Buffer {
+	if ff.stderr != nil {
+		return ff.stderr.Reference()
+	}
+	return nil
 }
 
 // Start begins execution of the ffmpeg process and is non-blocking.
@@ -50,14 +71,10 @@ func (ff *FFmpeg) Start() error {
 		return ErrorAlreadyRunning
 	}
 
-	ff.stdin = new(bytes.Buffer)
-	ff.stdout = new(bytes.Buffer)
-	ff.stderr = new(bytes.Buffer)
-
 	process := exec.Command("ffmpeg", ff.Arguments()...)
-	process.Stdin = ff.stdin
-	process.Stdout = ff.stdout
-	process.Stderr = ff.stderr
+	//process.Stdin = ff.Stdin()
+	process.Stdout = ff.Stdout()
+	process.Stderr = ff.Stderr()
 	ff.process = process
 
 	ff.spawn()
@@ -71,46 +88,32 @@ func (ff *FFmpeg) spawn() {
 	}
 	ff.running = true
 
-	go ff.threaderr()
-	go ff.threadout()
-	go ff.threadwait()
-}
-
-func (ff *FFmpeg) threadwait() {
 	if err := ff.process.Wait(); err != nil {
 		ff.error(err)
 	}
 	ff.running = false
-}
 
-func (ff *FFmpeg) threaderr() {
-	msg, err := io.ReadAll(ff.stderr)
-	if err != nil {
-		ff.error(err)
-	} else {
-		ff.error(fmt.Errorf("len:%d msg:%s", len(msg), string(msg)))
+	if ff.onExit != nil {
+		ff.onExit(ff)
 	}
-}
-
-func (ff *FFmpeg) threadout() {
+	ff.onExitRan = true
 }
 
 // Close stops the ffmpeg process and cleans up remaining resources.
 // Must be called on loop until no error is returned.
 func (ff *FFmpeg) Close() error {
-	ff.running = false
-	ff.stdin = nil
-	ff.stdout = nil
-	ff.stderr = nil
 	if ff.process != nil {
 		if err := ff.process.Process.Kill(); err != nil {
 			return err
 		}
 		ff.process = nil
 	}
-	if ff.onExit != nil {
-		ff.onExit(ff)
-		ff.onExit = nil
+	ff.running = false
+	for {
+		//Wait for onExit callback
+		if ff.onExitRan {
+			break
+		}
 	}
 	return nil
 }
