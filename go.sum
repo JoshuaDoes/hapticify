@@ -22,6 +22,8 @@ github.com/JoshuaDoes/ffmpeg v0.0.3-0.20250120031306-7eb02c718e0f h1:xOn4wyKvUR7
 github.com/JoshuaDoes/ffmpeg v0.0.3-0.20250120031306-7eb02c718e0f/go.mod h1:CLlvDnS/wFoeuj1yYyIYgJYHPMzk3M54VPKyqVgE/Pg=
 github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120042219-7740bd701885 h1:kr4eUZf/A+7uRisuy6Csyqh2lb2Yh0rNgH48UGq0DE0=
 github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120042219-7740bd701885/go.mod h1:DKdZh4EJy2VLlkjuq/ZDHz1p/l4sLhYgpuaDTmBxwog=
+github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120042859-c68e653b3128 h1:RDXRaD/ROUw3TPftPY/2MZR9UB2PospiEfziY4suhwM=
+github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120042859-c68e653b3128/go.mod h1:DKdZh4EJy2VLlkjuq/ZDHz1p/l4sLhYgpuaDTmBxwog=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
 github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
 github.com/superwhiskers/crunch/v3 v3.5.7 h1:N9RLxaR65C36i26BUIpzPXGy2f6pQ7wisu2bawbKNqg=

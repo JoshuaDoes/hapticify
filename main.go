@@ -80,10 +80,7 @@ func main() {
 	ff.SetBufferAudioIn(audioBuf)
 
 	//Start the conversion process
-	if err := ff.Start(); err != nil {
+	if err := ff.Run(); err != nil {
 		panic(err)
 	}
-
-	//Wait until it finishes
-	ff.Wait()
 }
