@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/JoshuaDoes/crunchio"
 	"github.com/JoshuaDoes/ffmpeg"
 	"github.com/spf13/pflag"
 
@@ -34,7 +35,6 @@ func main() {
 	}
 
 	ff := ffmpeg.NewFFmpeg("libvorbis", "ogg") //Android haptics must be OGG Vorbis
-	ff.SetInput(in)                            //Input file
 	ff.SetMetadata("HAPTICIFY", "JoshuaDoes")  //:D
 	ff.SetMetadata("ANDROID_HAPTIC", "2")      //Tell Android we have stereo haptics
 	ff.SetInputChannels(2)                     //Mix input to stereo
@@ -62,19 +62,22 @@ func main() {
 		if err := ff.Error(); err != nil {
 			fmt.Printf("ERRORS ENCOUNTERED: %v\n\n", err)
 		}
-		audioOut := ff.AudioOut().Bytes()
+		audioOut := ff.GetBufferAudioOut().Bytes()
 		fmt.Printf("AUDIO OUT: %d bytes\n\n", len(audioOut))
 		if len(audioOut) > 0 {
 			os.WriteFile(out, audioOut, 0777)
 		}
-		stats := ff.Stats().Bytes()
+		stats := ff.GetBufferStats().Bytes()
 		fmt.Printf("STATS: %d bytes\n%s\n\n", len(stats), string(stats))
 	})
 
-	//Close the audio input, we won't be passing anything in
-	if audioIn := ff.AudioIn(); audioIn != nil {
-		audioIn.Close()
+	//Load the input audio
+	audio, err := os.ReadFile(in)
+	if err != nil {
+		panic(err)
 	}
+	audioBuf := crunchio.NewBuffer("in", audio)
+	ff.SetBufferAudioIn(audioBuf)
 
 	//Start the conversion process
 	if err := ff.Start(); err != nil {
