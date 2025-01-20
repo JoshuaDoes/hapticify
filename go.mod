@@ -5,6 +5,7 @@ go 1.23.4
 require github.com/spf13/pflag v1.0.5
 
 require (
-	github.com/JoshuaDoes/crunchio v0.0.0-20250119012423-b0cceb64328c // indirect
+	github.com/JoshuaDoes/crunchio v0.0.0-20250120020830-711f688465bc // indirect
+	github.com/JoshuaDoes/ffmpeg v0.0.0-20250120020918-6c6ba8e3b908 // indirect
 	github.com/superwhiskers/crunch/v3 v3.5.7 // indirect
 )
