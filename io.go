@@ -30,22 +30,18 @@ func (b *Buffer) Read(dst []byte) (read int, err error) {
 	if b == nil {
 		panic("READ: buffer is nil")
 	}
-	//fmt.Printf("[%s] READ: dst(%d)\n", b.name, len(dst))
 	b.Lock()
 	defer b.Unlock()
 	if b.Closed() {
-		//fmt.Printf("[%s] READ: closed\n", b.name)
 		return 0, io.EOF
 	}
 	if b.parent != nil {
 		read, err = b.parent.ReadOffset(dst, b.offset)
 		b.offset += int64(read)
-		//fmt.Printf("[%s] READ: parent\n", b.name)
 		return
 	}
 	buffer := b.Buffer()
 	if buffer == nil {
-		//fmt.Printf("[%s] READ: buffer vanished\n", b.name)
 		return 0, fmt.Errorf("buffer: read: crunch buffer vanished")
 	}
 	if b.offset >= b.length {
@@ -56,13 +52,11 @@ func (b *Buffer) Read(dst []byte) (read int, err error) {
 		toRead = int64(len(dst))
 	}
 	if toRead == 0 {
-		//fmt.Printf("[%s] READ: nothing to read\n", b.name)
 		return 0, nil
 	}
 	bytes := buffer.ReadBytes(b.offset, toRead)
 	read = copy(dst, bytes)
 	b.offset += int64(read)
-	//fmt.Printf("[%s] READ: %d bytes\n%s\n", b.name, read, string(bytes))
 	return
 }
 
@@ -70,16 +64,13 @@ func (b *Buffer) ReadOffset(dst []byte, offset int64) (read int, err error) {
 	if b == nil {
 		panic("READOFFSET: buffer is nil")
 	}
-	//fmt.Printf("[%s] READOFFSET: dst(%d) offset(%d)\n", b.name, len(dst), offset)
 	b.Lock()
 	defer b.Unlock()
 	if b.Closed() {
-		//fmt.Printf("[%s] READOFFSET: closed\n", b.name)
 		return 0, io.EOF
 	}
 	buffer := b.Buffer()
 	if buffer == nil {
-		//fmt.Printf("[%s] READOFFSET: buffer vanished\n", b.name)
 		return 0, fmt.Errorf("buffer: readoffset: crunch buffer vanished")
 	}
 	toRead := b.length - offset
@@ -87,12 +78,10 @@ func (b *Buffer) ReadOffset(dst []byte, offset int64) (read int, err error) {
 		toRead = int64(len(dst))
 	}
 	if toRead == 0 {
-		//fmt.Printf("[%s] READOFFSET: nothing to read\n", b.name)
 		return 0, nil
 	}
 	bytes := buffer.ReadBytes(offset, toRead)
 	read = copy(dst, bytes)
-	//fmt.Printf("[%s] READOFFSET: %d bytes\n%s\n", b.name, read, string(bytes))
 	return
 }
 
@@ -100,22 +89,18 @@ func (b *Buffer) Write(src []byte) (wrote int, err error) {
 	if b == nil {
 		panic("WRITE: buffer is nil")
 	}
-	//fmt.Printf("[%s] WRITE: src(%d)\n%s\n", b.name, len(src), string(src))
 	b.Lock()
 	defer b.Unlock()
 	if b.Closed() {
-		//fmt.Printf("[%s] WRITE: closed\n", b.name)
 		return 0, io.EOF
 	}
 	if b.parent != nil {
 		wrote, err = b.parent.WriteOffset(src, b.offset)
 		b.offset += int64(wrote)
-		//fmt.Printf("[%s] WRITE: parent\n", b.name)
 		return
 	}
 	buffer := b.Buffer()
 	if buffer == nil {
-		//fmt.Printf("[%s] WRITE: buffer vanished\n", b.name)
 		return 0, fmt.Errorf("buffer: write: crunch buffer vanished")
 	}
 	if toGrow := (b.offset + int64(len(src))) - b.length; toGrow > 0 {
@@ -125,7 +110,6 @@ func (b *Buffer) Write(src []byte) (wrote int, err error) {
 	buffer.WriteBytes(b.offset, src)
 	wrote = len(src)
 	b.offset += int64(wrote)
-	//fmt.Printf("[%s] WRITE: %d bytes\n", b.name, wrote)
 	return
 }
 
@@ -133,16 +117,13 @@ func (b *Buffer) WriteOffset(src []byte, offset int64) (wrote int, err error) {
 	if b == nil {
 		panic("WRITEOFFSET: buffer is nil")
 	}
-	//fmt.Printf("[%s] WRITEOFFSET: src(%d) offset(%d)\n%s\n", b.name, len(src), offset, string(src))
 	b.Lock()
 	defer b.Unlock()
 	if b.Closed() {
-		//fmt.Printf("[%s] WRITEOFFSET: closed\n", b.name)
 		return 0, io.EOF
 	}
 	buffer := b.Buffer()
 	if buffer == nil {
-		//fmt.Printf("[%s] WRITEOFFSET: buffer vanished\n", b.name)
 		return 0, fmt.Errorf("buffer: writeoffset: crunch buffer vanished")
 	}
 	if toGrow := (offset + int64(len(src))) - b.length; toGrow > 0 {
@@ -151,7 +132,6 @@ func (b *Buffer) WriteOffset(src []byte, offset int64) (wrote int, err error) {
 	}
 	buffer.WriteBytes(offset, src)
 	wrote = len(src)
-	//fmt.Printf("[%s] WRITEOFFSET: %d bytes\n", b.name, wrote)
 	return
 }
 
@@ -159,16 +139,13 @@ func (b *Buffer) Seek(to int64, whence int) (offset int64, err error) {
 	if b == nil {
 		panic("SEEK: buffer is nil")
 	}
-	//fmt.Printf("[%s] SEEK: to(%d) whence(%d)\n", b.name, to, whence)
 	b.Lock()
 	defer b.Unlock()
 	if b.Closed() {
-		//fmt.Printf("[%s] SEEK: closed\n", b.name)
 		return 0, io.EOF
 	}
 	buffer := b.Buffer()
 	if buffer == nil {
-		//fmt.Printf("[%s] SEEK: buffer vanished\n", b.name)
 		return 0, fmt.Errorf("buffer: seek: crunch buffer vanished")
 	}
 	switch whence {
@@ -183,7 +160,6 @@ func (b *Buffer) Seek(to int64, whence int) (offset int64, err error) {
 	if b.parent == nil {
 		buffer.SeekByte(offset, false)
 	}
-	//fmt.Printf("[%s] SEEK: %d\n", b.name, offset)
 	return
 }
 
@@ -193,7 +169,6 @@ func (b *Buffer) Close() error {
 	}
 	b.Lock()
 	defer b.Unlock()
-	//fmt.Printf("[%s] CLOSE\n", b.name)
 	b.closed = true
 	if b.parent != nil {
 		return b.parent.Close()
