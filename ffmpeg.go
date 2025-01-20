@@ -40,7 +40,6 @@ func NewFFmpeg(codec, format string) *FFmpeg {
 	ff.metadata = make(map[string]string)
 	ff.codecOut = codec
 	ff.formatOut = format
-	ff.stdin = NewBuffer("in")
 	ff.stdout = NewBuffer("out")
 	ff.stderr = NewBuffer("err")
 	return ff
@@ -72,9 +71,15 @@ func (ff *FFmpeg) Start() error {
 	}
 
 	process := exec.Command("ffmpeg", ff.Arguments()...)
-	//process.Stdin = ff.Stdin()
-	process.Stdout = ff.Stdout()
-	process.Stderr = ff.Stderr()
+	if stdin := ff.Stdin(); stdin != nil {
+		process.Stdin = stdin
+	}
+	if stdout := ff.Stdout(); stdout != nil {
+		process.Stdout = stdout
+	}
+	if stderr := ff.Stderr(); stderr != nil {
+		process.Stderr = stderr
+	}
 	ff.process = process
 
 	ff.spawn()
