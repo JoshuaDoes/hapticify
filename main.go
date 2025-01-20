@@ -23,8 +23,8 @@ func main() {
 	pflag.StringVarP(&out, "out", "o", "", "output audio")
 	pflag.IntVarP(&high, "high", "h", 70, "highpass freq")
 	pflag.IntVarP(&low, "low", "l", 150, "lowpass freq")
-	pflag.Float64VarP(&vol, "vol", "v", 1, "audio dB gain")
-	pflag.Float64VarP(&vol, "hap", "s", 1, "haptics dB gain")
+	pflag.Float64VarP(&vol, "vol", "v", 0, "audio dB gain")
+	pflag.Float64VarP(&vol, "hap", "s", 0, "haptics dB gain")
 	pflag.Parse()
 
 	if in == "" {
@@ -46,13 +46,11 @@ func main() {
 	ff.SetBufferLength(time.Millisecond * 20)  //20ms audio buffer for low latency
 
 	hp := ff.NewFilter()
-	hp.SetInputChannels(0, 1)
 	hp.SetOutputChannels(0, 1)
 	hp.Add(ffmpeg.NewFilterHighpass(high))
 	hp.Add(ffmpeg.NewFilterVolumeGain(vol))
 
 	lp := ff.NewFilter()
-	lp.SetInputChannels(0, 1)
 	lp.SetOutputChannels(2, 3)
 	lp.Add(ffmpeg.NewFilterLowpass(low))
 	lp.Add(ffmpeg.NewFilterVolumeGain(hap))
