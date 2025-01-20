@@ -58,7 +58,7 @@ func main() {
 	lp.Add(ffmpeg.NewFilterVolumeGain(hap))
 
 	//Set a function to run as soon as ffmpeg exits
-	ff.SetOnExit(func(ff *ffmpeg.FFmpeg) {
+	ff.SetOnExit(func(ff *ffmpeg.Ffmpeg) {
 		if err := ff.Error(); err != nil {
 			fmt.Printf("ERRORS ENCOUNTERED: %v\n\n", err)
 		}
