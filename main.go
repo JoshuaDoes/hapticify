@@ -22,6 +22,8 @@ var (
 	filtervol = ffmpeg.NewFilterVolumeGain(vol)
 	filterlp  = ffmpeg.NewFilterLowpass(low)
 	filterhap = ffmpeg.NewFilterVolumeGain(hap)
+
+	waiting = 0
 )
 
 func main() {
@@ -54,15 +56,13 @@ func main() {
 	}
 
 	//Hapticify inputs!
-	waiters := make([]*ffmpeg.Ffmpeg, 0)
 	for i := 0; i < len(in); i++ {
-		waiters = append(waiters, hapticify(in[i]))
+		_ = hapticify(in[i])
+		waiting++
 	}
-	for i := 0; i < len(waiters); i++ {
-		for {
-			if !waiters[i].IsRunning() {
-				break
-			}
+	for {
+		if waiting <= 0 {
+			break
 		}
 	}
 }
@@ -125,6 +125,8 @@ func save(ff *ffmpeg.Ffmpeg) {
 		os.WriteFile(out, audioOut, 0777)
 		fmt.Printf("IN: %s\nOUT: %s\n\n", in, out)
 	}
+
+	waiting--
 }
 
 func files(in string) []string {
