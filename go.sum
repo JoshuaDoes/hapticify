@@ -10,6 +10,8 @@ github.com/JoshuaDoes/crunchio v0.0.1 h1:a6U//HAbum5WvHAPajlz4KaIkS9q3pxaFAkkJ0S
 github.com/JoshuaDoes/crunchio v0.0.1/go.mod h1:Zk8lv1MlNNb5WpMcNSr8uBgleoE5G3PpXi6MD3JImOA=
 github.com/JoshuaDoes/crunchio v0.0.2-0.20250120031223-4b76002b4f84 h1:Q5DqPft9OY1F8yo7C+7V2oWceT0GnBo35dphIBEhNRg=
 github.com/JoshuaDoes/crunchio v0.0.2-0.20250120031223-4b76002b4f84/go.mod h1:Zk8lv1MlNNb5WpMcNSr8uBgleoE5G3PpXi6MD3JImOA=
+github.com/JoshuaDoes/crunchio v0.0.3-0.20250120233618-bb0e090b1d9c h1:Ge/SL2UQSGVVnJuMqosCOyJUQL7AMG++QFP8v9AumKQ=
+github.com/JoshuaDoes/crunchio v0.0.3-0.20250120233618-bb0e090b1d9c/go.mod h1:Zk8lv1MlNNb5WpMcNSr8uBgleoE5G3PpXi6MD3JImOA=
 github.com/JoshuaDoes/ffmpeg v0.0.0-20250120020918-6c6ba8e3b908 h1:yykjpr8GmeWxnNDu0Bu2LZpAhCMg9YSV7cIEp+GEUDI=
 github.com/JoshuaDoes/ffmpeg v0.0.0-20250120020918-6c6ba8e3b908/go.mod h1:8iHY2fjCxG0xxygV58yq4PFcJ8hZpDZR76SzxmuQ7ws=
 github.com/JoshuaDoes/ffmpeg v0.0.3-0.20250120025011-450d8272da12 h1:wZZYdON8a2HnluHX5k9zZzlLDwKv8N2D1SCEnDeYgH4=
@@ -28,6 +30,10 @@ github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120053129-2c6ed4d2bea3 h1:2PGu9k0EUq/
 github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120053129-2c6ed4d2bea3/go.mod h1:DKdZh4EJy2VLlkjuq/ZDHz1p/l4sLhYgpuaDTmBxwog=
 github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120053903-d22b4cb41b23 h1:yTeqkcsLVKau3DrlGMNDw3JyGFpnz6AH0ZjrJuNWcao=
 github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120053903-d22b4cb41b23/go.mod h1:DKdZh4EJy2VLlkjuq/ZDHz1p/l4sLhYgpuaDTmBxwog=
+github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120233711-e0cb2dfb781e h1:k49At8xcxb34p5S/XFpmEjOvkjUDylO+hOS2H44zfTk=
+github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250120233711-e0cb2dfb781e/go.mod h1:EvpsKkjFhM9ifhtPAUgCdazFDyMVquYdeNmd8NX3ppk=
+github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250121002214-ab768ee8474f h1:zGrKuE7qYaepHiq0a9GtebZAxVYPKt2SqVCi6HBL3S0=
+github.com/JoshuaDoes/ffmpeg v0.0.4-0.20250121002214-ab768ee8474f/go.mod h1:EvpsKkjFhM9ifhtPAUgCdazFDyMVquYdeNmd8NX3ppk=
 github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
 github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
 github.com/superwhiskers/crunch/v3 v3.5.7 h1:N9RLxaR65C36i26BUIpzPXGy2f6pQ7wisu2bawbKNqg=
